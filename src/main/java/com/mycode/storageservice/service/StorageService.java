@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class StorageService {
@@ -25,5 +26,11 @@ public class StorageService {
             return "File uploaded successfully: "+file.getOriginalFilename();
         }
         return null;
+    }
+
+    public byte[] downloadImage(String fileName) {
+        Optional<ImageData> optionalImageData = storageRepository.findByName(fileName);
+        byte[] images = ImageUtils.decompressImage(optionalImageData.get().getImageData());
+        return images;
     }
 }
